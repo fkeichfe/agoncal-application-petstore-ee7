@@ -58,6 +58,7 @@ public class PurchaseOrderService extends AbstractService<PurchaseOrder>implemen
       for (ShoppingCartItem cartItem : cartItems)
       {
          orderLines.add(new OrderLine(cartItem.getQuantity(), entityManager.merge(cartItem.getItem())));
+         order.setTotal(order.getTotal() == null ? 0.0f : order.getTotal() + cartItem.getSubTotal());
       }
       order.setOrderLines(orderLines);
 
