@@ -9,7 +9,7 @@ import org.agoncal.application.petstore.view.CatchException;
 import org.agoncal.application.petstore.view.LoggedIn;
 
 import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 
 @Named
-@ConversationScoped
+@SessionScoped
 @Loggable
 @CatchException
 public class ShoppingCartBean extends AbstractBean implements Serializable {
@@ -43,7 +43,7 @@ public class ShoppingCartBean extends AbstractBean implements Serializable {
     @Inject
     private Conversation conversation;
 
-    private List<ShoppingCartItem> cartItems;
+    private List<ShoppingCartItem> cartItems = new ArrayList<>();
     private CreditCard creditCard = new CreditCard();
     private PurchaseOrder order;
 
@@ -53,12 +53,6 @@ public class ShoppingCartBean extends AbstractBean implements Serializable {
 
     public String addItemToCart() {
         Item item = catalogBean.findItem(getParamId("itemId"));
-
-        // Start conversation
-        if (conversation.isTransient()) {
-            cartItems = new ArrayList<>();
-            conversation.begin();
-        }
 
         boolean itemFound = false;
         for (ShoppingCartItem cartItem : cartItems) {
@@ -99,11 +93,6 @@ public class ShoppingCartBean extends AbstractBean implements Serializable {
     public String confirmOrder() {
         order = orderBean.createOrder(getCustomer(), creditCard, getCartItems());
         cartItems.clear();
-
-        // Stop conversation
-        if (!conversation.isTransient()) {
-            conversation.end();
-        }
 
         return "orderconfirmed.faces";
     }
