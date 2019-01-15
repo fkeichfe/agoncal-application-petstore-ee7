@@ -8,7 +8,7 @@
 
 	<f:metadata>
 		<f:viewParam name="page" value="#{countryBean.page}"/>
-		<f:viewAction action="#{countryBean.paginate}"/>
+		<f:viewAction action="#{countryBean.paginate}" onPostback="true"/>
 	</f:metadata>
 
 	<ui:param name="pageTitle" value="Search Country entities"/>
