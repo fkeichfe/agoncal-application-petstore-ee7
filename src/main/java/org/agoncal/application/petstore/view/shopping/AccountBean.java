@@ -46,7 +46,6 @@ public class AccountBean extends AbstractBean implements Serializable {
     private Customer loggedinCustomer;
 
     @Inject
-    @SessionScoped
     private transient LoginContext loginContext;
 
     // ======================================
