@@ -21,7 +21,7 @@
 
         <!-- Bootstrap core CSS -->
         <h:outputStylesheet library="webjars" name="bootstrap/3.3.7-1/css/bootstrap.min.css"/>
-        <h:outputStylesheet library="webjars" name="fontawesome/4.7.0/css/font-awesome.css"/>
+        <h:outputScript library="webjars" name="font-awesome/5.5.0/js/all.js"/>
 
         <!-- Custom styles for this template -->
         <h:outputStylesheet name="css/style.css"/>
@@ -81,13 +81,13 @@
                                             value="#{i18n.welcome} #{accountBean.loggedinCustomer.firstName}"
                                             rendered="#{accountBean.loggedIn}">
                                         <!--<f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>-->
-                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                        <i class="fas fa-user" aria-hidden="true"></i>
                                     </h:link>
                                 </li>
                                 <li>
                                     <h:commandLink action="#{accountBean.doLogout}"
                                                    rendered="#{accountBean.loggedIn}">
-                                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                                         <h:outputText value="${i18n.logOut}"/>
                                     </h:commandLink>
                                 </li>
@@ -95,14 +95,14 @@
                                     <h:link outcome="/shopping/signon" value="#{i18n.logIn}"
                                             rendered="#{!accountBean.loggedIn}">
                                         <!--<f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>-->
-                                        <i class="fa fa-sign-in" aria-hidden="true"></i>
+                                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
                                     </h:link>
                                 </li>
                                 <li>
                                     <h:link outcome="/shopping/showcart" value="#{i18n.shoppingCart}"
                                             rendered="#{!shoppingCartBean.shoppingCartIsEmpty()}">
                                         <!--<f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>-->
-                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
                                     </h:link>
                                 </li>
 
@@ -168,7 +168,7 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <h:outputScript library="webjars" name="jquery/2.2.4/jquery.min.js"/>
         <h:outputScript library="webjars" name="bootstrap/3.3.7-1/js/bootstrap.min.js"/>
-        <h:outputScript target="head">
+        <h:outputScript target="footer">
             // Add the $() function
             $ = jQuery;
             $(document).ready(function () {
