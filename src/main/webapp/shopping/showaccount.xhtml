@@ -47,7 +47,7 @@
                         <h:outputText value="#{i18n.customer_dateOfBirth}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.dateOfBirth}" class="form-control"
                                       pt:disabled="disabled">
-                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            <f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
                         </h:inputText>
 
                         <h:outputText value="#{i18n.customer_age}:"/>

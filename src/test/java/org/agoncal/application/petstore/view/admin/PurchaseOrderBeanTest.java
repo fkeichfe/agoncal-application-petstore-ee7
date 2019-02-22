@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -72,7 +73,7 @@ public class PurchaseOrderBeanTest
       // Creates an object
       Country country = new Country("DV", "Dummy value", "Dummy value", "DMV", "DMV");
       Address address = new Address("78 Gnu Rd", "Texas", "666", country);
-      Customer customer = new Customer("Paul", "Mc Cartney", "pmac", "pmac", "paul@beales.com", address);
+      Customer customer = new Customer("Paul", "Mc Cartney", "pmac", "pmac", "paul@beales.com", address, LocalDate.of(1970, 1, 1));
       CreditCard creditCard = new CreditCard("1234", CreditCardType.MASTER_CARD, "10/12");
       Set<OrderLine> orderLines = new HashSet<>();
       PurchaseOrder purchaseOrder = new PurchaseOrder(customer, creditCard, address);

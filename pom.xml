@@ -4,25 +4,25 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.agoncal.application</groupId>
-  <artifactId>petstoreee7</artifactId>
-  <version>7.0</version>
+  <artifactId>petstoreee8</artifactId>
+  <version>8.0</version>
   <packaging>war</packaging>
-  <name>Petstore application using Java EE 7</name>
+  <name>Petstore application using Java EE 8</name>
 
   <properties>
-    <version.javaee>7.0</version.javaee>
+    <version.javaee>8.0</version.javaee>
     <version.log4j>2.11.1</version.log4j>
     <!-- Test -->
     <version.junit>4.12</version.junit>
-    <version.arquillian>1.4.0.Final</version.arquillian>
-    <version.arquillian.wildfly>2.0.2.Final</version.arquillian.wildfly>
-    <version.resteasy>3.1.4.Final</version.resteasy>
+    <version.arquillian>1.4.1.Final</version.arquillian>
+    <version.arquillian.wildfly>2.1.1.Final</version.arquillian.wildfly>
+    <version.resteasy>3.6.2.Final</version.resteasy>
     <version.equalsverifier>1.7.8</version.equalsverifier>
     <!-- App servers -->
-    <version.wildfly>11.0.0.Final</version.wildfly>
+    <version.wildfly>15.0.1.Final</version.wildfly>
     <!-- UI (WebJar, Bootstrap, JQuery...) -->
-    <version.bootstrap>3.3.7-1</version.bootstrap>
-    <version.jquery>2.2.4</version.jquery>
+    <version.bootstrap>3.4.0</version.bootstrap>
+    <version.jquery>3.3.1-2</version.jquery>
     <version.primefaces>6.2</version.primefaces>
     <version.primefaces-themes>1.0.10</version.primefaces-themes>
     <version.fontawesome>5.5.0</version.fontawesome>

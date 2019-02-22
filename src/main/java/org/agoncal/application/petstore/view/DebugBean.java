@@ -2,7 +2,7 @@ package org.agoncal.application.petstore.view;
 
 import org.agoncal.application.petstore.util.Loggable;
 
-import javax.faces.bean.RequestScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;

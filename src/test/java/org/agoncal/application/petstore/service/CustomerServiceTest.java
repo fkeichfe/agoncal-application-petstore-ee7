@@ -16,6 +16,8 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 
+import java.time.LocalDate;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -68,7 +70,7 @@ public class CustomerServiceTest
       // Creates an object
       Country country = new Country("DV", "Dummy value", "Dummy value", "DMV", "DMV");
       Address address = new Address("Dummy value", "Dummy value", "DV", country);
-      Customer customer = new Customer("Dummy value", "Dummy value", "Dummy", "Dummy value", "Dummy value", address);
+      Customer customer = new Customer("Dummy value", "Dummy value", "Dummy", "Dummy value", "Dummy value", address, LocalDate.of(1970, 1, 1));
 
       // Inserts the object into the database
       customer = customerservice.persist(customer);

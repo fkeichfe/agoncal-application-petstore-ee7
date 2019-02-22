@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 import javax.validation.Validator;
 
+import java.time.LocalDate;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -47,7 +49,7 @@ public class CustomerIT {
         // Creates an object
         Country country = new Country("DV", "Dummy value", "Dummy value", "DMV", "DMV");
         Address address = new Address("78 Gnu Rd", "Texas", "666", country);
-        Customer customer = new Customer("Paul", "Mc Cartney", "pmac", "pmac", "paul@beales.com", address);
+        Customer customer = new Customer("Paul", "Mc Cartney", "pmac", "pmac", "paul@beales.com", address, LocalDate.of(1970, 1, 1));
 
         // Checks the object is valid
         assertEquals("Should have not constraint violation", 0, validator.validate(customer).size());

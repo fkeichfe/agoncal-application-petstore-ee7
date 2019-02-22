@@ -47,7 +47,9 @@
 
                         <h:outputText value="#{i18n.customer_dateOfBirth}:"/>
                         <p:calendar id="dateOfBirth" display="inline" navigator="true" showOn="button" pattern="d/M/yyyy"
-                                    value="#{accountBean.loggedinCustomer.dateOfBirth}"/>
+                                    value="#{accountBean.loggedinCustomer.dateOfBirth}" yearRange="c-100:c">
+                            <f:converter converterId="localDateConverter" />
+                        </p:calendar>
                         <h:message for="dateOfBirth" style="color: red;"/>
 
                     </h:panelGrid>

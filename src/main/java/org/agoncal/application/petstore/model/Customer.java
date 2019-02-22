@@ -2,6 +2,8 @@ package org.agoncal.application.petstore.model;
 
 import java.io.Serializable;
 import java.security.MessageDigest;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import javax.persistence.*;
@@ -76,9 +78,8 @@ public class Customer implements Serializable
    private UserRole role;
 
    @Column(name = "date_of_birth")
-   @Temporal(TemporalType.DATE)
    @Past
-   private Date dateOfBirth;
+   private LocalDate dateOfBirth;
 
    @Transient
    private Integer age;
@@ -106,7 +107,7 @@ public class Customer implements Serializable
    }
 
    public Customer(String firstName, String lastName, String login, String plainTextPassword, String email,
-            Address address)
+            Address address, LocalDate dateOfBirth)
    {
       this.firstName = firstName;
       this.lastName = lastName;
@@ -114,7 +115,7 @@ public class Customer implements Serializable
       this.password = digestPassword(plainTextPassword);
       this.email = email;
       this.homeAddress = address;
-      this.dateOfBirth = new Date();
+      this.dateOfBirth = dateOfBirth;
    }
 
    // ======================================
@@ -135,16 +136,9 @@ public class Customer implements Serializable
          return;
       }
 
-      Calendar birth = new GregorianCalendar();
-      birth.setTime(dateOfBirth);
-      Calendar now = new GregorianCalendar();
-      now.setTime(new Date());
-      int adjust = 0;
-      if (now.get(Calendar.DAY_OF_YEAR) - birth.get(Calendar.DAY_OF_YEAR) < 0)
-      {
-         adjust = -1;
-      }
-      age = now.get(Calendar.YEAR) - birth.get(Calendar.YEAR) + adjust;
+      LocalDate now = LocalDate.now();
+
+      age = Integer.valueOf((int) ChronoUnit.YEARS.between(dateOfBirth, now));
    }
 
    @PrePersist
@@ -287,12 +281,12 @@ public class Customer implements Serializable
       this.email = email;
    }
 
-   public Date getDateOfBirth()
+   public LocalDate getDateOfBirth()
    {
       return dateOfBirth;
    }
 
-   public void setDateOfBirth(Date dateOfBirth)
+   public void setDateOfBirth(LocalDate dateOfBirth)
    {
       this.dateOfBirth = dateOfBirth;
    }
