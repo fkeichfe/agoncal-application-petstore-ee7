@@ -20,6 +20,8 @@
     <version.equalsverifier>1.7.8</version.equalsverifier>
     <!-- App servers -->
     <version.wildfly>15.0.1.Final</version.wildfly>
+    <version.thorntail>2.3.0.Final</version.thorntail>
+    <version.h2>1.4.198</version.h2>
     <!-- UI (WebJar, Bootstrap, JQuery...) -->
     <version.bootstrap>3.4.1</version.bootstrap>
     <version.jquery>3.3.1-2</version.jquery>
@@ -46,6 +48,13 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>bom-all</artifactId>
+        <version>${version.thorntail}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
         <version>${version.arquillian}</version>
@@ -56,6 +65,37 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- Thorntail Fractions -->
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>jaxrs</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>jaxrs-multipart</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>jsf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>cdi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>ejb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${version.h2}</version>
+    </dependency>
+
     <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
@@ -104,6 +144,7 @@
     <dependency>
       <groupId>org.jboss.arquillian.junit</groupId>
       <artifactId>arquillian-junit-container</artifactId>
+      <version>${version.arquillian}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -180,6 +221,24 @@
           </dependency>
         </dependencies>
       </plugin>
+
+      <plugin>
+        <groupId>io.thorntail</groupId>
+        <artifactId>thorntail-maven-plugin</artifactId>
+        <version>${version.thorntail}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>package</goal>
+            </goals>
+            <configuration>
+              <properties>
+                <thorntail.app.version>${project.version}</thorntail.app.version>
+              </properties>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -209,60 +268,59 @@
       </dependencies>
     </profile>
 
-  <profile>
-    <id>arquillian-wildfly-managed</id>
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>${version.maven.dependency.plugin}</version>
-          <executions>
-            <execution>
-              <id>unpack</id>
-              <phase>process-test-classes</phase>
-              <goals>
-                <goal>unpack</goal>
-              </goals>
-              <configuration>
-                <artifactItems>
-                  <artifactItem>
-                    <groupId>org.wildfly</groupId>
-                    <artifactId>wildfly-dist</artifactId>
-                    <version>${version.wildfly}</version>
-                    <type>zip</type>
-                    <overWrite>false</overWrite>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                  </artifactItem>
-                </artifactItems>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${version.maven.surefire.plugin}</version>
-          <configuration>
-            <skipTests>false</skipTests>
-            <systemPropertyVariables>
-              <arquillian.launch>arquillian-wildfly-managed</arquillian.launch>
-            </systemPropertyVariables>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
-    <dependencies>
-      <dependency>
-        <groupId>org.wildfly.arquillian</groupId>
-        <artifactId>wildfly-arquillian-container-managed</artifactId>
-        <version>${version.arquillian.wildfly}</version>
-        <scope>test</scope>
-      </dependency>
-    </dependencies>
-  </profile>
+    <profile>
+      <id>arquillian-wildfly-managed</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>${version.maven.dependency.plugin}</version>
+            <executions>
+              <execution>
+                <id>unpack</id>
+                <phase>process-test-classes</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.wildfly</groupId>
+                      <artifactId>wildfly-dist</artifactId>
+                      <version>${version.wildfly}</version>
+                      <type>zip</type>
+                      <overWrite>false</overWrite>
+                      <outputDirectory>${project.build.directory}</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${version.maven.surefire.plugin}</version>
+            <configuration>
+              <skipTests>false</skipTests>
+              <systemPropertyVariables>
+                <arquillian.launch>arquillian-wildfly-managed</arquillian.launch>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.wildfly.arquillian</groupId>
+          <artifactId>wildfly-arquillian-container-managed</artifactId>
+          <version>${version.arquillian.wildfly}</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
   </profiles>
-
 
   <repositories>
     <repository>
