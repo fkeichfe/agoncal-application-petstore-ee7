@@ -21,7 +21,7 @@
     <!-- App servers -->
     <version.wildfly>15.0.1.Final</version.wildfly>
     <version.thorntail>2.3.0.Final</version.thorntail>
-    <version.h2>1.4.198</version.h2>
+    <version.postgresql>42.2.5</version.postgresql>
     <!-- UI (WebJar, Bootstrap, JQuery...) -->
     <version.bootstrap>3.4.1</version.bootstrap>
     <version.jquery>3.3.1-2</version.jquery>
@@ -36,6 +36,7 @@
     <version.maven.dependency.plugin>2.10</version.maven.dependency.plugin>
     <version.maven.surefire.plugin>2.19.1</version.maven.surefire.plugin>
     <version.maven.failsafe.plugin>2.19.1</version.maven.failsafe.plugin>
+    <version.maven.resources.plugin>3.1.0</version.maven.resources.plugin>
     <version.swagger.plugin>3.1.6</version.swagger.plugin>
     <!-- Project -->
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -91,9 +92,9 @@
       <artifactId>jpa</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>${version.h2}</version>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${version.postgresql}</version>
     </dependency>
 
     <dependency>
@@ -169,7 +170,18 @@
 
   <build>
     <finalName>applicationPetstore</finalName>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${version.maven.resources.plugin}</version>
+      </plugin>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>${version.maven.war.plugin}</version>
