@@ -10,8 +10,8 @@
       "email" : "antonio.goncalves@gmail.com"
     }
   },
-  "host" : "localhost:8080",
-  "basePath" : "/applicationPetstore/rest",
+  "host" : "localhost:5000",
+  "basePath" : "/rest",
   "tags" : [ {
     "name" : "Category"
   }, {
@@ -30,7 +30,7 @@
         "tags" : [ "Category" ],
         "summary" : "Lists all the categories",
         "description" : "",
-        "operationId" : "listAll",
+        "operationId" : "listAllCategories",
         "produces" : [ "application/xml", "application/json" ],
         "parameters" : [ {
           "name" : "start",
@@ -61,8 +61,16 @@
         "tags" : [ "Category" ],
         "summary" : "Creates a category",
         "description" : "",
-        "operationId" : "create",
+        "operationId" : "createCategory",
         "consumes" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Category"
+          }
+        } ],
         "responses" : {
           "default" : {
             "description" : "successful operation"
@@ -75,7 +83,7 @@
         "tags" : [ "Category" ],
         "summary" : "Finds a category given an identifier",
         "description" : "",
-        "operationId" : "findById",
+        "operationId" : "findCategoryById",
         "produces" : [ "application/xml", "application/json" ],
         "parameters" : [ {
           "name" : "id",
@@ -95,8 +103,23 @@
         "tags" : [ "Category" ],
         "summary" : "Updates a category",
         "description" : "",
-        "operationId" : "update",
+        "operationId" : "updateCategory",
         "consumes" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Category"
+          }
+        } ],
         "responses" : {
           "default" : {
             "description" : "successful operation"
@@ -107,7 +130,7 @@
         "tags" : [ "Category" ],
         "summary" : "Deletes a category by id",
         "description" : "",
-        "operationId" : "deleteById",
+        "operationId" : "deleteCategoryById",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -128,7 +151,7 @@
         "tags" : [ "Country" ],
         "summary" : "Lists all the countries",
         "description" : "",
-        "operationId" : "listAll",
+        "operationId" : "listAllCountries",
         "produces" : [ "application/xml", "application/json" ],
         "parameters" : [ {
           "name" : "start",
@@ -159,8 +182,16 @@
         "tags" : [ "Country" ],
         "summary" : "Creates a country",
         "description" : "",
-        "operationId" : "create",
+        "operationId" : "createCountry",
         "consumes" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Country"
+          }
+        } ],
         "responses" : {
           "default" : {
             "description" : "successful operation"
@@ -173,7 +204,7 @@
         "tags" : [ "Country" ],
         "summary" : "Retrieves a country by its id",
         "description" : "",
-        "operationId" : "findById",
+        "operationId" : "findCountryById",
         "produces" : [ "application/xml", "application/json" ],
         "parameters" : [ {
           "name" : "id",
@@ -193,8 +224,23 @@
         "tags" : [ "Country" ],
         "summary" : "Updates a country",
         "description" : "",
-        "operationId" : "update",
+        "operationId" : "updateCountry",
         "consumes" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Country"
+          }
+        } ],
         "responses" : {
           "default" : {
             "description" : "successful operation"
@@ -205,7 +251,7 @@
         "tags" : [ "Country" ],
         "summary" : "Deletes a country given an id",
         "description" : "",
-        "operationId" : "deleteById",
+        "operationId" : "deleteCountryById",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -226,7 +272,7 @@
         "tags" : [ "Customer" ],
         "summary" : "Lists all the customers",
         "description" : "",
-        "operationId" : "listAll",
+        "operationId" : "listAllCustomers",
         "produces" : [ "application/xml", "application/json" ],
         "parameters" : [ {
           "name" : "start",
@@ -257,8 +303,16 @@
         "tags" : [ "Customer" ],
         "summary" : "Creates a customer",
         "description" : "",
-        "operationId" : "create",
+        "operationId" : "createCustomer",
         "consumes" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Customer"
+          }
+        } ],
         "responses" : {
           "default" : {
             "description" : "successful operation"
@@ -271,7 +325,7 @@
         "tags" : [ "Customer" ],
         "summary" : "Finds a customer by it identifier",
         "description" : "",
-        "operationId" : "findById",
+        "operationId" : "findCustomerById",
         "produces" : [ "application/xml", "application/json" ],
         "parameters" : [ {
           "name" : "id",
@@ -291,8 +345,23 @@
         "tags" : [ "Customer" ],
         "summary" : "Updates a customer",
         "description" : "",
-        "operationId" : "update",
+        "operationId" : "updateCustomer",
         "consumes" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Customer"
+          }
+        } ],
         "responses" : {
           "default" : {
             "description" : "successful operation"
@@ -303,7 +372,7 @@
         "tags" : [ "Customer" ],
         "summary" : "Deletes a customer by id",
         "description" : "",
-        "operationId" : "deleteById",
+        "operationId" : "deleteCustomerById",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -324,7 +393,7 @@
         "tags" : [ "Item" ],
         "summary" : "Lists all items",
         "description" : "",
-        "operationId" : "listAll",
+        "operationId" : "listAllItems",
         "produces" : [ "application/xml", "application/json" ],
         "parameters" : [ {
           "name" : "start",
@@ -355,8 +424,16 @@
         "tags" : [ "Item" ],
         "summary" : "Creates a new item",
         "description" : "",
-        "operationId" : "create",
+        "operationId" : "createItem",
         "consumes" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Item"
+          }
+        } ],
         "responses" : {
           "default" : {
             "description" : "successful operation"
@@ -369,7 +446,7 @@
         "tags" : [ "Item" ],
         "summary" : "Finds an item by its id",
         "description" : "",
-        "operationId" : "findById",
+        "operationId" : "findItemById",
         "produces" : [ "application/xml", "application/json" ],
         "parameters" : [ {
           "name" : "id",
@@ -389,8 +466,23 @@
         "tags" : [ "Item" ],
         "summary" : "Updates an item",
         "description" : "",
-        "operationId" : "update",
+        "operationId" : "updateItem",
         "consumes" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Item"
+          }
+        } ],
         "responses" : {
           "default" : {
             "description" : "successful operation"
@@ -401,7 +493,7 @@
         "tags" : [ "Item" ],
         "summary" : "Deletes an item by its id",
         "description" : "",
-        "operationId" : "deleteById",
+        "operationId" : "deleteItemById",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -422,7 +514,7 @@
         "tags" : [ "Product" ],
         "summary" : "Lists all products",
         "description" : "",
-        "operationId" : "listAll",
+        "operationId" : "listAllProducts",
         "produces" : [ "application/xml", "application/json" ],
         "parameters" : [ {
           "name" : "start",
@@ -453,8 +545,16 @@
         "tags" : [ "Product" ],
         "summary" : "Creates new product",
         "description" : "",
-        "operationId" : "create",
+        "operationId" : "createProduct",
         "consumes" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Product"
+          }
+        } ],
         "responses" : {
           "default" : {
             "description" : "successful operation"
@@ -467,7 +567,7 @@
         "tags" : [ "Product" ],
         "summary" : "Finds a product by id",
         "description" : "",
-        "operationId" : "findById",
+        "operationId" : "findProductById",
         "produces" : [ "application/xml", "application/json" ],
         "parameters" : [ {
           "name" : "id",
@@ -487,8 +587,23 @@
         "tags" : [ "Product" ],
         "summary" : "Updates a product",
         "description" : "",
-        "operationId" : "update",
+        "operationId" : "updateProduct",
         "consumes" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Product"
+          }
+        } ],
         "responses" : {
           "default" : {
             "description" : "successful operation"
@@ -499,7 +614,7 @@
         "tags" : [ "Product" ],
         "summary" : "Deletes a product by id",
         "description" : "",
-        "operationId" : "deleteById",
+        "operationId" : "deleteProductById",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",

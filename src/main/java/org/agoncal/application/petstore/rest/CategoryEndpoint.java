@@ -2,6 +2,7 @@ package org.agoncal.application.petstore.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.agoncal.application.petstore.model.Category;
 import org.agoncal.application.petstore.util.Loggable;
 
@@ -40,7 +41,7 @@ public class CategoryEndpoint
    @POST
    @Consumes( {"application/xml", "application/json"})
    @ApiOperation("Creates a category")
-   public Response create(Category entity)
+   public Response createCategory(@ApiParam(required = true) Category entity)
    {
       em.persist(entity);
       return Response.created(UriBuilder.fromResource(CategoryEndpoint.class).path(String.valueOf(entity.getId())).build()).build();
@@ -49,7 +50,7 @@ public class CategoryEndpoint
    @DELETE
    @Path("/{id:[0-9][0-9]*}")
    @ApiOperation("Deletes a category by id")
-   public Response deleteById(@PathParam("id") Long id)
+   public Response deleteCategoryById(@PathParam("id") Long id)
    {
       Category entity = em.find(Category.class, id);
       if (entity == null)
@@ -64,7 +65,7 @@ public class CategoryEndpoint
    @Path("/{id:[0-9][0-9]*}")
    @Produces( {"application/xml", "application/json"})
    @ApiOperation("Finds a category given an identifier")
-   public Response findById(@PathParam("id") Long id)
+   public Response findCategoryById(@PathParam("id") Long id)
    {
       TypedQuery<Category> findByIdQuery = em.createQuery("SELECT DISTINCT c FROM Category c WHERE c.id = :entityId ORDER BY c.id", Category.class);
       findByIdQuery.setParameter("entityId", id);
@@ -87,7 +88,7 @@ public class CategoryEndpoint
    @GET
    @Produces( {"application/xml", "application/json"})
    @ApiOperation("Lists all the categories")
-   public List<Category> listAll(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult)
+   public List<Category> listAllCategories(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult)
    {
       TypedQuery<Category> findAllQuery = em.createQuery("SELECT DISTINCT c FROM Category c ORDER BY c.id", Category.class);
       if (startPosition != null)
@@ -106,10 +107,11 @@ public class CategoryEndpoint
    @Path("/{id:[0-9][0-9]*}")
    @Consumes( {"application/xml", "application/json"})
    @ApiOperation("Updates a category")
-   public Response update(Category entity)
+   public Response updateCategory(@PathParam("id")Long id, @ApiParam(required = true) Category entity)
    {
       try
       {
+         entity.setId(id);
          entity = em.merge(entity);
       }
       catch (OptimisticLockException e)

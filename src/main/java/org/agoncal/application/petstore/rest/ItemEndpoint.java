@@ -2,6 +2,7 @@ package org.agoncal.application.petstore.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.agoncal.application.petstore.model.Item;
 import org.agoncal.application.petstore.util.Loggable;
 
@@ -40,7 +41,7 @@ public class ItemEndpoint
    @POST
    @Consumes( {"application/xml", "application/json"})
    @ApiOperation("Creates a new item")
-   public Response create(Item entity)
+   public Response createItem(@ApiParam(required = true) Item entity)
    {
       em.persist(entity);
       return Response.created(UriBuilder.fromResource(ItemEndpoint.class).path(String.valueOf(entity.getId())).build()).build();
@@ -49,7 +50,7 @@ public class ItemEndpoint
    @DELETE
    @Path("/{id:[0-9][0-9]*}")
    @ApiOperation("Deletes an item by its id")
-   public Response deleteById(@PathParam("id") Long id)
+   public Response deleteItemById(@PathParam("id") Long id)
    {
       Item entity = em.find(Item.class, id);
       if (entity == null)
@@ -64,7 +65,7 @@ public class ItemEndpoint
    @Path("/{id:[0-9][0-9]*}")
    @Produces( {"application/xml", "application/json"})
    @ApiOperation("Finds an item by its id")
-   public Response findById(@PathParam("id") Long id)
+   public Response findItemById(@PathParam("id") Long id)
    {
       TypedQuery<Item> findByIdQuery = em.createQuery("SELECT DISTINCT i FROM Item i LEFT JOIN FETCH i.product WHERE i.id = :entityId ORDER BY i.id", Item.class);
       findByIdQuery.setParameter("entityId", id);
@@ -87,7 +88,7 @@ public class ItemEndpoint
    @GET
    @Produces( {"application/xml", "application/json"})
    @ApiOperation("Lists all items")
-   public List<Item> listAll(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult)
+   public List<Item> listAllItems(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult)
    {
       TypedQuery<Item> findAllQuery = em.createQuery("SELECT DISTINCT i FROM Item i LEFT JOIN FETCH i.product ORDER BY i.id", Item.class);
       if (startPosition != null)
@@ -106,10 +107,11 @@ public class ItemEndpoint
    @Path("/{id:[0-9][0-9]*}")
    @Consumes( {"application/xml", "application/json"})
    @ApiOperation("Updates an item")
-   public Response update(Item entity)
+   public Response updateItem(@PathParam("id")Long id, @ApiParam(required = true) Item entity)
    {
       try
       {
+         entity.setId(id);
          entity = em.merge(entity);
       }
       catch (OptimisticLockException e)
