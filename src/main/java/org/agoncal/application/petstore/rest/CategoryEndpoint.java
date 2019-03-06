@@ -1,10 +1,14 @@
 package org.agoncal.application.petstore.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.agoncal.application.petstore.model.Category;
 import org.agoncal.application.petstore.util.Loggable;
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.annotation.Timed;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
@@ -23,7 +27,7 @@ import java.util.List;
 @Stateless
 @Path("/categories")
 @Loggable
-@Api("Category")
+@Tag(name = "Category")
 public class CategoryEndpoint
 {
 
@@ -40,16 +44,16 @@ public class CategoryEndpoint
 
    @POST
    @Consumes( {"application/xml", "application/json"})
-   @ApiOperation("Creates a category")
-   public Response createCategory(@ApiParam(required = true) Category entity)
+   @Operation(summary = "Creates a category")
+   public Response createCategory(@RequestBody(required = true) Category entity)
    {
       em.persist(entity);
       return Response.created(UriBuilder.fromResource(CategoryEndpoint.class).path(String.valueOf(entity.getId())).build()).build();
    }
 
    @DELETE
-   @Path("/{id:[0-9][0-9]*}")
-   @ApiOperation("Deletes a category by id")
+   @Path("/{id}")
+   @Operation(description = "Deletes a category by id")
    public Response deleteCategoryById(@PathParam("id") Long id)
    {
       Category entity = em.find(Category.class, id);
@@ -62,13 +66,14 @@ public class CategoryEndpoint
    }
 
    @GET
-   @Path("/{id:[0-9][0-9]*}")
+   @Path("/{id}")
    @Produces( {"application/xml", "application/json"})
-   @ApiOperation("Finds a category given an identifier")
+   @Operation(description = "Finds a category given an identifier")
    public Response findCategoryById(@PathParam("id") Long id)
    {
       TypedQuery<Category> findByIdQuery = em.createQuery("SELECT DISTINCT c FROM Category c WHERE c.id = :entityId ORDER BY c.id", Category.class);
       findByIdQuery.setParameter("entityId", id);
+      System.out.println("ID is: " + id);
       Category entity;
       try
       {
@@ -87,7 +92,21 @@ public class CategoryEndpoint
 
    @GET
    @Produces( {"application/xml", "application/json"})
-   @ApiOperation("Lists all the categories")
+   @Operation(description = "Lists all the categories")
+   @Timed(name = "listAllCategoriesTimed",
+           description = "Monitor the time listAllCategories method takes",
+           unit = MetricUnits.MILLISECONDS,
+           absolute = true)
+   @Metered(name = "listAllCategoriesMetered",
+           unit = MetricUnits.MILLISECONDS,
+           description = "Monitor the rate events occured",
+           absolute = true)
+   @Counted(unit = MetricUnits.NONE,
+           name = "listAllCategoriesCount",
+           absolute = true,
+           monotonic = true,
+           displayName = "read all categories",
+           description = "Monitor how many times listAllCategories method was called")
    public List<Category> listAllCategories(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult)
    {
       TypedQuery<Category> findAllQuery = em.createQuery("SELECT DISTINCT c FROM Category c ORDER BY c.id", Category.class);
@@ -104,10 +123,10 @@ public class CategoryEndpoint
    }
 
    @PUT
-   @Path("/{id:[0-9][0-9]*}")
+   @Path("/{id}")
    @Consumes( {"application/xml", "application/json"})
-   @ApiOperation("Updates a category")
-   public Response updateCategory(@PathParam("id")Long id, @ApiParam(required = true) Category entity)
+   @Operation(description = "Updates a category")
+   public Response updateCategory(@PathParam("id") Long id, @RequestBody(required = true) Category entity)
    {
       try
       {

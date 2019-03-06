@@ -28,8 +28,6 @@
     <version.primefaces>6.2</version.primefaces>
     <version.primefaces-themes>1.0.10</version.primefaces-themes>
     <version.fontawesome>5.5.0</version.fontawesome>
-    <!-- Other -->
-    <version.swagger>1.5.22</version.swagger>
     <!--Maven Plugins & co-->
     <version.maven.war.plugin>3.1.0</version.maven.war.plugin>
     <version.maven.compiler.plugin>3.1</version.maven.compiler.plugin>
@@ -37,7 +35,6 @@
     <version.maven.surefire.plugin>2.19.1</version.maven.surefire.plugin>
     <version.maven.failsafe.plugin>2.19.1</version.maven.failsafe.plugin>
     <version.maven.resources.plugin>3.1.0</version.maven.resources.plugin>
-    <version.swagger.plugin>3.1.6</version.swagger.plugin>
     <!-- Project -->
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -92,6 +89,12 @@
       <artifactId>jpa</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>microprofile-openapi</artifactId>
+    </dependency>
+    
+
+    <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>${version.postgresql}</version>
@@ -102,12 +105,6 @@
       <artifactId>javaee-api</artifactId>
       <version>${version.javaee}</version>
       <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>io.swagger</groupId>
-      <artifactId>swagger-annotations</artifactId>
-      <version>${version.swagger}</version>
     </dependency>
 
     <dependency>
@@ -188,55 +185,6 @@
         <configuration>
           <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.github.kongchen</groupId>
-        <artifactId>swagger-maven-plugin</artifactId>
-        <version>${version.swagger.plugin}</version>
-        <configuration>
-          <apiSources>
-            <apiSource>
-              <springmvc>false</springmvc>
-              <locations>
-                <location>org.agoncal.application.petstore.rest</location>
-              </locations>
-              <schemes>
-                <scheme>http</scheme>
-                <scheme>https</scheme>
-              </schemes>
-              <host>localhost:5000</host>
-              <basePath>/rest</basePath>
-              <outputFormats>json</outputFormats>
-              <info>
-                <title>Petstore APIs</title>
-                <version>1.0.0</version>
-                <description>PetStore APIs exposed</description>
-                <contact>
-                  <email>antonio.goncalves@gmail.com</email>
-                  <name>Antonio Goncalves</name>
-                  <url>https://antoniogoncalves.org/</url>
-                </contact>
-              </info>
-              <swaggerDirectory>${basedir}/src/main/webapp</swaggerDirectory>
-              <attachSwaggerArtifact>true</attachSwaggerArtifact>
-            </apiSource>
-          </apiSources>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-hibernate-validations</artifactId>
-            <version>${version.swagger}</version>
-          </dependency>
-        </dependencies>
       </plugin>
 
       <plugin>

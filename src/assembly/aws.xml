@@ -19,6 +19,9 @@
             </includes>
         </fileSet>
         <fileSet>
+            <directory>.ebextensions</directory>
+        </fileSet>
+        <fileSet>
             <directory>src</directory>
         </fileSet>
     </fileSets>

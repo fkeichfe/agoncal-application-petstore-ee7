@@ -1,0 +1,10 @@
+info:
+  title: Petstore APIs
+  contact:
+    name: Antonio Goncalves
+    url: https://antoniogoncalves.org
+    email: antonio.goncalves@gmail.com
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: localhost

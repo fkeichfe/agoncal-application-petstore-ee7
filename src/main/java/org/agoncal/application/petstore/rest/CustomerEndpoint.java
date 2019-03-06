@@ -1,10 +1,10 @@
 package org.agoncal.application.petstore.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.agoncal.application.petstore.model.Customer;
 import org.agoncal.application.petstore.util.Loggable;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
@@ -23,7 +23,7 @@ import java.util.List;
 @Stateless
 @Path("/customers")
 @Loggable
-@Api("Customer")
+@Tag(name = "Customer")
 public class CustomerEndpoint
 {
 
@@ -40,16 +40,16 @@ public class CustomerEndpoint
 
    @POST
    @Consumes( {"application/xml", "application/json"})
-   @ApiOperation("Creates a customer")
-   public Response createCustomer(@ApiParam(required = true) Customer entity)
+   @Operation(description = "Creates a customer")
+   public Response createCustomer(@RequestBody(required = true) Customer entity)
    {
       em.persist(entity);
       return Response.created(UriBuilder.fromResource(CustomerEndpoint.class).path(String.valueOf(entity.getId())).build()).build();
    }
 
    @DELETE
-   @Path("/{id:[0-9][0-9]*}")
-   @ApiOperation("Deletes a customer by id")
+   @Path("/{id}")
+   @Operation(description = "Deletes a customer by id")
    public Response deleteCustomerById(@PathParam("id") Long id)
    {
       Customer entity = em.find(Customer.class, id);
@@ -62,9 +62,9 @@ public class CustomerEndpoint
    }
 
    @GET
-   @Path("/{id:[0-9][0-9]*}")
+   @Path("/{id}")
    @Produces( {"application/xml", "application/json"})
-   @ApiOperation("Finds a customer by it identifier")
+   @Operation(description = "Finds a customer by it identifier")
    public Response findCustomerById(@PathParam("id") Long id)
    {
       TypedQuery<Customer> findByIdQuery = em.createQuery("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.homeAddress.country WHERE c.id = :entityId ORDER BY c.id", Customer.class);
@@ -87,7 +87,7 @@ public class CustomerEndpoint
 
    @GET
    @Produces( {"application/xml", "application/json"})
-   @ApiOperation("Lists all the customers")
+   @Operation(description = "Lists all the customers")
    public List<Customer> listAllCustomers(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult)
    {
       TypedQuery<Customer> findAllQuery = em.createQuery("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.homeAddress.country ORDER BY c.id", Customer.class);
@@ -104,10 +104,10 @@ public class CustomerEndpoint
    }
 
    @PUT
-   @Path("/{id:[0-9][0-9]*}")
+   @Path("/{id}")
    @Consumes( {"application/xml", "application/json"})
-   @ApiOperation("Updates a customer")
-   public Response updateCustomer(@PathParam("id")Long id, @ApiParam(required = true) Customer entity)
+   @Operation(description = "Updates a customer")
+   public Response updateCustomer(@PathParam("id")Long id, @RequestBody(required = true) Customer entity)
    {
       try
       {

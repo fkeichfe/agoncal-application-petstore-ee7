@@ -1,10 +1,10 @@
 package org.agoncal.application.petstore.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.agoncal.application.petstore.model.Product;
 import org.agoncal.application.petstore.util.Loggable;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
@@ -23,7 +23,7 @@ import java.util.List;
 @Stateless
 @Path("/products")
 @Loggable
-@Api("Product")
+@Tag(name = "Product")
 public class ProductEndpoint
 {
 
@@ -40,16 +40,16 @@ public class ProductEndpoint
 
    @POST
    @Consumes( {"application/xml", "application/json"})
-   @ApiOperation("Creates new product")
-   public Response createProduct(@ApiParam(required = true) Product entity)
+   @Operation(description = "Creates new product")
+   public Response createProduct(@RequestBody(required = true) Product entity)
    {
       em.persist(entity);
       return Response.created(UriBuilder.fromResource(ProductEndpoint.class).path(String.valueOf(entity.getId())).build()).build();
    }
 
    @DELETE
-   @Path("/{id:[0-9][0-9]*}")
-   @ApiOperation("Deletes a product by id")
+   @Path("/{id}")
+   @Operation(description = "Deletes a product by id")
    public Response deleteProductById(@PathParam("id") Long id)
    {
       Product entity = em.find(Product.class, id);
@@ -62,9 +62,9 @@ public class ProductEndpoint
    }
 
    @GET
-   @Path("/{id:[0-9][0-9]*}")
+   @Path("/{id}")
    @Produces( {"application/xml", "application/json"})
-   @ApiOperation("Finds a product by id")
+   @Operation(description = "Finds a product by id")
    public Response findProductById(@PathParam("id") Long id)
    {
       TypedQuery<Product> findByIdQuery = em.createQuery("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.category WHERE p.id = :entityId ORDER BY p.id", Product.class);
@@ -87,7 +87,7 @@ public class ProductEndpoint
 
    @GET
    @Produces( {"application/xml", "application/json"})
-   @ApiOperation("Lists all products")
+   @Operation(description = "Lists all products")
    public List<Product> listAllProducts(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult)
    {
       TypedQuery<Product> findAllQuery = em.createQuery("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.category ORDER BY p.id", Product.class);
@@ -104,10 +104,10 @@ public class ProductEndpoint
    }
 
    @PUT
-   @Path("/{id:[0-9][0-9]*}")
+   @Path("/{id}")
    @Consumes( {"application/xml", "application/json"})
-   @ApiOperation("Updates a product")
-   public Response updateProduct(@PathParam("id")Long id, @ApiParam(required = true) Product entity)
+   @Operation(description = "Updates a product")
+   public Response updateProduct(@PathParam("id")Long id, @RequestBody(required = true) Product entity)
    {
       try
       {
