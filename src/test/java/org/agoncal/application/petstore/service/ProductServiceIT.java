@@ -1,6 +1,7 @@
 package org.agoncal.application.petstore.service;
 
-import org.agoncal.application.petstore.model.Country;
+import org.agoncal.application.petstore.model.Category;
+import org.agoncal.application.petstore.model.Product;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -14,7 +15,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
-public class CountryServiceTest
+public class ProductServiceIT
 {
 
    // ======================================
@@ -22,7 +23,7 @@ public class CountryServiceTest
    // ======================================
 
    @Inject
-   private CountryService countryservice;
+   private ProductService productservice;
 
    // ======================================
    // =             Deployment             =
@@ -33,8 +34,9 @@ public class CountryServiceTest
    {
       return ShrinkWrap.create(JavaArchive.class)
             .addClass(AbstractService.class)
-            .addClass(CountryService.class)
-            .addClass(Country.class)
+            .addClass(ProductService.class)
+            .addClass(Product.class)
+            .addClass(Category.class)
             .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
    }
@@ -46,37 +48,38 @@ public class CountryServiceTest
    @Test
    public void should_be_deployed()
    {
-      Assert.assertNotNull(countryservice);
+      Assert.assertNotNull(productservice);
    }
 
    @Test
    public void should_crud()
    {
       // Gets all the objects
-      int initialSize = countryservice.listAll().size();
+      int initialSize = productservice.listAll().size();
 
       // Creates an object
-      Country country = new Country("DV", "Dummy value", "Dummy value", "DMV", "DMV");
+      Category category = new Category("Dummy value", "Dummy value");
+      Product product = new Product("Dummy value", "Dummy value", category);
 
       // Inserts the object into the database
-      country = countryservice.persist(country);
-      assertNotNull(country.getId());
-      assertEquals(initialSize + 1, countryservice.listAll().size());
+      product = productservice.persist(product);
+      assertNotNull(product.getId());
+      assertEquals(initialSize + 1, productservice.listAll().size());
 
       // Finds the object from the database and checks it's the right one
-      country = countryservice.findById(country.getId());
-      assertEquals("Dummy value", country.getName());
+      product = productservice.findById(product.getId());
+      assertEquals("Dummy value", product.getName());
 
       // Updates the object
-      country.setName("A new value");
-      country = countryservice.merge(country);
+      product.setName("A new value");
+      product = productservice.merge(product);
 
       // Finds the object from the database and checks it has been updated
-      country = countryservice.findById(country.getId());
-      assertEquals("A new value", country.getName());
+      product = productservice.findById(product.getId());
+      assertEquals("A new value", product.getName());
 
       // Deletes the object from the database and checks it's not there anymore
-      countryservice.remove(country);
-      assertEquals(initialSize, countryservice.listAll().size());
+      productservice.remove(product);
+      assertEquals(initialSize, productservice.listAll().size());
    }
 }

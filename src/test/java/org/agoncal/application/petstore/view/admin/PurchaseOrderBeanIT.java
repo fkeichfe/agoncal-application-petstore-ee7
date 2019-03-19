@@ -21,7 +21,7 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
-public class PurchaseOrderBeanTest
+public class PurchaseOrderBeanIT
 {
 
    // ======================================

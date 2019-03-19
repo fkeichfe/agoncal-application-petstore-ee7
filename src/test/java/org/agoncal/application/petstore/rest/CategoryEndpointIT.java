@@ -1,7 +1,6 @@
 package org.agoncal.application.petstore.rest;
 
 import org.agoncal.application.petstore.model.Category;
-import org.agoncal.application.petstore.model.Product;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -24,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class ProductEndpointTest
+public class CategoryEndpointIT
 {
 
    // ======================================
@@ -43,8 +42,7 @@ public class ProductEndpointTest
    {
       return ShrinkWrap.create(WebArchive.class)
             .addClass(RestApplication.class)
-            .addClass(ProductEndpoint.class)
-            .addClass(Product.class)
+            .addClass(CategoryEndpoint.class)
             .addClass(Category.class)
             .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
@@ -58,7 +56,7 @@ public class ProductEndpointTest
    public void should_be_deployed()
    {
       Client client = ClientBuilder.newClient();
-      WebTarget target = client.target(baseURL).path("rest").path("products");
+      WebTarget target = client.target(baseURL).path("rest").path("categories");
       assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_XML).get().getStatus());
    }
 
@@ -66,7 +64,7 @@ public class ProductEndpointTest
    public void should_produce_json()
    {
       Client client = ClientBuilder.newClient();
-      WebTarget target = client.target(baseURL).path("rest").path("products");
+      WebTarget target = client.target(baseURL).path("rest").path("categories");
       assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_JSON).get().getStatus());
    }
 
@@ -74,7 +72,7 @@ public class ProductEndpointTest
    public void should_produce_xml()
    {
       Client client = ClientBuilder.newClient();
-      WebTarget target = client.target(baseURL).path("rest").path("products");
+      WebTarget target = client.target(baseURL).path("rest").path("categories");
       assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_XML).get().getStatus());
    }
 }

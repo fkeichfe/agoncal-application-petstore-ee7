@@ -35,7 +35,8 @@ public class PurchaseOrderIT {
     @Deployment
     public static JavaArchive jar() {
         return ShrinkWrap.create(JavaArchive.class)
-                .addClasses(Address.class, Customer.class, CreditCard.class, PurchaseOrder.class)
+                .addClasses(Address.class, Customer.class, CreditCard.class, PurchaseOrder.class, Country.class,
+                        CreditCardType.class, OrderLine.class)
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 

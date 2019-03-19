@@ -1,9 +1,6 @@
 package org.agoncal.application.petstore.view.admin;
 
-import org.agoncal.application.petstore.model.Category;
-import org.agoncal.application.petstore.model.Item;
-import org.agoncal.application.petstore.model.OrderLine;
-import org.agoncal.application.petstore.model.Product;
+import org.agoncal.application.petstore.model.Country;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -17,7 +14,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
-public class OrderLineBeanTest
+public class CountryBeanIT
 {
 
    // ======================================
@@ -25,7 +22,7 @@ public class OrderLineBeanTest
    // ======================================
 
    @Inject
-   private OrderLineBean orderlinebean;
+   private CountryBean countrybean;
 
    // ======================================
    // =             Deployment             =
@@ -35,11 +32,8 @@ public class OrderLineBeanTest
    public static JavaArchive createDeployment()
    {
       return ShrinkWrap.create(JavaArchive.class)
-            .addClass(OrderLineBean.class)
-            .addClass(OrderLine.class)
-            .addClass(Category.class)
-            .addClass(Product.class)
-            .addClass(Item.class)
+            .addClass(CountryBean.class)
+            .addClass(Country.class)
             .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
    }
@@ -51,46 +45,43 @@ public class OrderLineBeanTest
    @Test
    public void should_be_deployed()
    {
-      Assert.assertNotNull(orderlinebean);
+      Assert.assertNotNull(countrybean);
    }
 
    @Test
    public void should_crud()
    {
       // Creates an object
-      Category category = new Category("Dummy value", "Dummy value");
-      Product product = new Product("Dummy value", "Dummy value", category);
-      Item item = new Item("Dummy value", 10f, "Dummy value", "Dummy value", product);
-      OrderLine orderLine = new OrderLine(77, item);
+      Country country = new Country("DV", "Dummy value", "Dummy value", "DMV", "DMV");
 
       // Inserts the object into the database
-      orderlinebean.setOrderLine(orderLine);
-      orderlinebean.create();
-      orderlinebean.update();
-      orderLine = orderlinebean.getOrderLine();
-      assertNotNull(orderLine.getId());
+      countrybean.setCountry(country);
+      countrybean.create();
+      countrybean.update();
+      country = countrybean.getCountry();
+      assertNotNull(country.getId());
 
       // Finds the object from the database and checks it's the right one
-      orderLine = orderlinebean.findById(orderLine.getId());
-      assertEquals(new Integer(77), orderLine.getQuantity());
+      country = countrybean.findById(country.getId());
+      assertEquals("Dummy value", country.getName());
 
       // Deletes the object from the database and checks it's not there anymore
-      orderlinebean.setId(orderLine.getId());
-      orderlinebean.create();
-      orderlinebean.delete();
-      orderLine = orderlinebean.findById(orderLine.getId());
-      assertNull(orderLine);
+      countrybean.setId(country.getId());
+      countrybean.create();
+      countrybean.delete();
+      country = countrybean.findById(country.getId());
+      assertNull(country);
    }
 
    @Test
    public void should_paginate()
    {
       // Creates an empty example
-      OrderLine example = new OrderLine();
+      Country example = new Country();
 
       // Paginates through the example
-      orderlinebean.setExample(example);
-      orderlinebean.paginate();
-      assertTrue((orderlinebean.getPageItems().size() == orderlinebean.getPageSize()) || (orderlinebean.getPageItems().size() == orderlinebean.getCount()));
+      countrybean.setExample(example);
+      countrybean.paginate();
+      assertTrue((countrybean.getPageItems().size() == countrybean.getPageSize()) || (countrybean.getPageItems().size() == countrybean.getCount()));
    }
 }

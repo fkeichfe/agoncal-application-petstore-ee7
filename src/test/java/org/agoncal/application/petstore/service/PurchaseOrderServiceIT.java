@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
-public class PurchaseOrderServiceTest
+public class PurchaseOrderServiceIT
 {
 
    // ======================================

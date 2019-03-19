@@ -1,22 +1,22 @@
 package org.agoncal.application.petstore.service;
 
 import org.agoncal.application.petstore.model.Category;
-import org.agoncal.application.petstore.model.Item;
-import org.agoncal.application.petstore.model.Product;
-import javax.inject.Inject;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.junit.Assert.*;
+
+import javax.inject.Inject;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
-public class ItemServiceTest
+public class CategoryServiceIT
 {
 
    // ======================================
@@ -24,7 +24,7 @@ public class ItemServiceTest
    // ======================================
 
    @Inject
-   private ItemService itemservice;
+   private CategoryService categoryservice;
 
    // ======================================
    // =             Deployment             =
@@ -35,9 +35,7 @@ public class ItemServiceTest
    {
       return ShrinkWrap.create(JavaArchive.class)
             .addClass(AbstractService.class)
-            .addClass(ItemService.class)
-            .addClass(Item.class)
-            .addClass(Product.class)
+            .addClass(CategoryService.class)
             .addClass(Category.class)
             .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
@@ -50,39 +48,39 @@ public class ItemServiceTest
    @Test
    public void should_be_deployed()
    {
-      Assert.assertNotNull(itemservice);
+      Assert.assertNotNull(categoryservice);
    }
 
    @Test
    public void should_crud()
    {
       // Gets all the objects
-      int initialSize = itemservice.listAll().size();
+      int initialSize = categoryservice.listAll().size();
 
       // Creates an object
-      Category category = new Category("Dummy value", "Dummy value");
-      Product product = new Product("Dummy value", "Dummy value", category);
-      Item item = new Item("Dummy value", 10f, "Dummy value", "Dummy value", product);
+      Category category = new Category();
+      category.setName("Dummy value");
+      category.setDescription("Dummy value");
 
       // Inserts the object into the database
-      item = itemservice.persist(item);
-      assertNotNull(item.getId());
-      assertEquals(initialSize + 1, itemservice.listAll().size());
+      category = categoryservice.persist(category);
+      assertNotNull(category.getId());
+      assertEquals(initialSize + 1, categoryservice.listAll().size());
 
       // Finds the object from the database and checks it's the right one
-      item = itemservice.findById(item.getId());
-      assertEquals("Dummy value", item.getName());
+      category = categoryservice.findById(category.getId());
+      assertEquals("Dummy value", category.getName());
 
       // Updates the object
-      item.setName("A new value");
-      item = itemservice.merge(item);
+      category.setName("A new value");
+      category = categoryservice.merge(category);
 
       // Finds the object from the database and checks it has been updated
-      item = itemservice.findById(item.getId());
-      assertEquals("A new value", item.getName());
+      category = categoryservice.findById(category.getId());
+      assertEquals("A new value", category.getName());
 
       // Deletes the object from the database and checks it's not there anymore
-      itemservice.remove(item);
-      assertEquals(initialSize, itemservice.listAll().size());
+      categoryservice.remove(category);
+      assertEquals(initialSize, categoryservice.listAll().size());
    }
 }

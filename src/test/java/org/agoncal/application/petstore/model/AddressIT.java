@@ -34,6 +34,7 @@ public class AddressIT {
     public static JavaArchive jar() {
         return ShrinkWrap.create(JavaArchive.class)
                 .addClass(Address.class)
+                .addClass(Country.class)
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 

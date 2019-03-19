@@ -1,6 +1,8 @@
 package org.agoncal.application.petstore.view.admin;
 
-import org.agoncal.application.petstore.model.Country;
+import org.agoncal.application.petstore.model.Category;
+import org.agoncal.application.petstore.model.Item;
+import org.agoncal.application.petstore.model.Product;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -14,7 +16,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
-public class CountryBeanTest
+public class ItemBeanIT
 {
 
    // ======================================
@@ -22,7 +24,7 @@ public class CountryBeanTest
    // ======================================
 
    @Inject
-   private CountryBean countrybean;
+   private ItemBean itembean;
 
    // ======================================
    // =             Deployment             =
@@ -32,8 +34,10 @@ public class CountryBeanTest
    public static JavaArchive createDeployment()
    {
       return ShrinkWrap.create(JavaArchive.class)
-            .addClass(CountryBean.class)
-            .addClass(Country.class)
+            .addClass(ItemBean.class)
+            .addClass(Item.class)
+            .addClass(Product.class)
+            .addClass(Category.class)
             .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
    }
@@ -45,43 +49,45 @@ public class CountryBeanTest
    @Test
    public void should_be_deployed()
    {
-      Assert.assertNotNull(countrybean);
+      Assert.assertNotNull(itembean);
    }
 
    @Test
    public void should_crud()
    {
       // Creates an object
-      Country country = new Country("DV", "Dummy value", "Dummy value", "DMV", "DMV");
+      Category category = new Category("Dummy value", "Dummy value");
+      Product product = new Product("Dummy value", "Dummy value", category);
+      Item item = new Item("Dummy value", 10f, "Dummy value", "Dummy value", product);
 
       // Inserts the object into the database
-      countrybean.setCountry(country);
-      countrybean.create();
-      countrybean.update();
-      country = countrybean.getCountry();
-      assertNotNull(country.getId());
+      itembean.setItem(item);
+      itembean.create();
+      itembean.update();
+      item = itembean.getItem();
+      assertNotNull(item.getId());
 
       // Finds the object from the database and checks it's the right one
-      country = countrybean.findById(country.getId());
-      assertEquals("Dummy value", country.getName());
+      item = itembean.findById(item.getId());
+      assertEquals("Dummy value", item.getName());
 
       // Deletes the object from the database and checks it's not there anymore
-      countrybean.setId(country.getId());
-      countrybean.create();
-      countrybean.delete();
-      country = countrybean.findById(country.getId());
-      assertNull(country);
+      itembean.setId(item.getId());
+      itembean.create();
+      itembean.delete();
+      item = itembean.findById(item.getId());
+      assertNull(item);
    }
 
    @Test
    public void should_paginate()
    {
       // Creates an empty example
-      Country example = new Country();
+      Item example = new Item();
 
       // Paginates through the example
-      countrybean.setExample(example);
-      countrybean.paginate();
-      assertTrue((countrybean.getPageItems().size() == countrybean.getPageSize()) || (countrybean.getPageItems().size() == countrybean.getCount()));
+      itembean.setExample(example);
+      itembean.paginate();
+      assertTrue((itembean.getPageItems().size() == itembean.getPageSize()) || (itembean.getPageItems().size() == itembean.getCount()));
    }
 }

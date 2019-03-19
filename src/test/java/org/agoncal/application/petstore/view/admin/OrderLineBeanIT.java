@@ -1,6 +1,9 @@
 package org.agoncal.application.petstore.view.admin;
 
 import org.agoncal.application.petstore.model.Category;
+import org.agoncal.application.petstore.model.Item;
+import org.agoncal.application.petstore.model.OrderLine;
+import org.agoncal.application.petstore.model.Product;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -14,7 +17,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
-public class CategoryBeanTest
+public class OrderLineBeanIT
 {
 
    // ======================================
@@ -22,7 +25,7 @@ public class CategoryBeanTest
    // ======================================
 
    @Inject
-   private CategoryBean categorybean;
+   private OrderLineBean orderlinebean;
 
    // ======================================
    // =             Deployment             =
@@ -32,8 +35,11 @@ public class CategoryBeanTest
    public static JavaArchive createDeployment()
    {
       return ShrinkWrap.create(JavaArchive.class)
-            .addClass(CategoryBean.class)
+            .addClass(OrderLineBean.class)
+            .addClass(OrderLine.class)
             .addClass(Category.class)
+            .addClass(Product.class)
+            .addClass(Item.class)
             .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
    }
@@ -45,45 +51,46 @@ public class CategoryBeanTest
    @Test
    public void should_be_deployed()
    {
-      Assert.assertNotNull(categorybean);
+      Assert.assertNotNull(orderlinebean);
    }
 
    @Test
    public void should_crud()
    {
       // Creates an object
-      Category category = new Category();
-      category.setName("Dummy value");
-      category.setDescription("Dummy value");
+      Category category = new Category("Dummy value", "Dummy value");
+      Product product = new Product("Dummy value", "Dummy value", category);
+      Item item = new Item("Dummy value", 10f, "Dummy value", "Dummy value", product);
+      OrderLine orderLine = new OrderLine(77, item);
 
       // Inserts the object into the database
-      categorybean.setCategory(category);
-      categorybean.create();
-      categorybean.update();
-      category = categorybean.getCategory();
-      assertNotNull(category.getId());
+      orderlinebean.setOrderLine(orderLine);
+      orderlinebean.create();
+      orderlinebean.update();
+      orderLine = orderlinebean.getOrderLine();
+      assertNotNull(orderLine.getId());
 
       // Finds the object from the database and checks it's the right one
-      category = categorybean.findById(category.getId());
-      assertEquals("Dummy value", category.getName());
+      orderLine = orderlinebean.findById(orderLine.getId());
+      assertEquals(new Integer(77), orderLine.getQuantity());
 
       // Deletes the object from the database and checks it's not there anymore
-      categorybean.setId(category.getId());
-      categorybean.create();
-      categorybean.delete();
-      category = categorybean.findById(category.getId());
-      assertNull(category);
+      orderlinebean.setId(orderLine.getId());
+      orderlinebean.create();
+      orderlinebean.delete();
+      orderLine = orderlinebean.findById(orderLine.getId());
+      assertNull(orderLine);
    }
 
    @Test
    public void should_paginate()
    {
       // Creates an empty example
-      Category example = new Category();
+      OrderLine example = new OrderLine();
 
       // Paginates through the example
-      categorybean.setExample(example);
-      categorybean.paginate();
-      assertTrue((categorybean.getPageItems().size() == categorybean.getPageSize()) || (categorybean.getPageItems().size() == categorybean.getCount()));
+      orderlinebean.setExample(example);
+      orderlinebean.paginate();
+      assertTrue((orderlinebean.getPageItems().size() == orderlinebean.getPageSize()) || (orderlinebean.getPageItems().size() == orderlinebean.getCount()));
    }
 }

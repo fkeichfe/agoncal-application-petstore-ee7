@@ -35,7 +35,7 @@ public class CustomerIT {
     @Deployment
     public static JavaArchive jar() {
         return ShrinkWrap.create(JavaArchive.class)
-                .addClasses(Category.class, Address.class)
+                .addClasses(Category.class, Address.class, Country.class, Customer.class, UserRole.class)
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 

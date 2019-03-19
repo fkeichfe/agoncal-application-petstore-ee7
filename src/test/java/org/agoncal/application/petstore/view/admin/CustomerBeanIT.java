@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
-public class CustomerBeanTest
+public class CustomerBeanIT
 {
 
    // ======================================
